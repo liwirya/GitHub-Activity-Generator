@@ -3,19 +3,19 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/Python-3.x-blue.svg)](https://www.python.org/)
 
-**GitHub Activity Generator** adalah skrip Python sederhana namun *powerful* yang dirancang untuk mengisi grafik kontribusi GitHub Anda dengan riwayat *commit* buatan (fake history). Alat ini memungkinkan Anda untuk membuat profil GitHub terlihat aktif ("hijau") dalam hitungan menit.
+**GitHub Activity Generator** adalah skrip Python sederhana namun *powerful* yang dirancang untuk mengisi grafik kontribusi GitHub Anda dengan riwayat *commit* buatan. Alat ini memungkinkan Anda untuk membuat profil GitHub terlihat aktif dalam hitungan menit.
 
-> **⚠️ Disclaimer:** Script ini dibuat hanya untuk tujuan edukasi dan kesenangan semata. Keterampilan *coding* yang asli jauh lebih berharga daripada sekadar kotak hijau di profil!
+> **⚠️ Disclaimer:** Script ini dibuat hanya untuk tujuan edukasi dan kesenangan semata. Jangan disalahgunakan! Keterampilan *coding* yang asli jauh lebih berharga daripada sekadar kotak hijau di profil.
 
 ---
 
 ## ✨ Fitur Utama
 
 * **Kustomisasi Penuh:** Atur frekuensi *commit* (persentase hari aktif), jumlah maksimal *commit* per hari, dan rentang waktu (hari sebelum/sesudah).
-* **Mode Realistis:** Opsi `--no_weekends` agar tidak melakukan *commit* di hari Sabtu & Minggu, sehingga terlihat seperti aktivitas kerja normal.
-* **Aman untuk README:** Tersedia skrip `contribute2.py` yang menggunakan file `commits.txt` khusus untuk *log* riwayat aktivitas, sehingga tidak akan menyentuh atau merusak `README.md` proyek.
+* **Mode Realistis:** Opsi `--no_weekends` agar tidak melakukan *commit* di hari Sabtu & Minggu, sehingga terlihat seperti aktivitas normal.
 * **Dukungan Push Otomatis:** Script dapat melakukan *push* otomatis ke repositori jarak jauh menggunakan koneksi yang sudah diatur (seperti SSH).
 * **Konfigurasi Identitas:** Bisa mengatur `user.name` dan `user.email` khusus untuk riwayat *commit* ini secara langsung lewat argumen CLI.
+* **Aman untuk README:** Skrip menggunakan file khusus (`commits.txt`) untuk *log* riwayat aktivitas, sehingga tidak akan merusak file utama repositori Anda.
 
 ---
 
@@ -23,44 +23,23 @@
 
 * **Python 3**: Bahasa pemrograman utama untuk menjalankan logika skrip (*randomizer* waktu dan penanganan argumen).
 * **Git**: Sistem kontrol versi untuk melakukan inisialisasi, membuat *commit*, dan *push*.
-* **Bash/Shell**: Digunakan secara *native* oleh skrip untuk mengeksekusi perintah sistem.
+* **Bash/Shell**: Digunakan secara *native* oleh skrip untuk mengeksekusi perintah sistem di latar belakang.
 
 ---
 
 ## 📋 Prasyarat Instalasi
 
-Sebelum menjalankan script, pastikan lingkungan Anda memenuhi syarat berikut:
+Sebelum menjalankan script, pastikan Anda telah memenuhi hal berikut:
 
-1.  **Python 3.x** terinstal di sistem Anda.
-2.  **Git** terinstal dan terkonfigurasi dengan benar.
-3.  **Koneksi SSH ke GitHub** (Sangat disarankan agar proses *push* berjalan otomatis tanpa perlu memasukkan kata sandi berulang kali).
-
-### 🔑 Cara Setup SSH (Singkat)
-
-Jika Anda belum menghubungkan komputer lokal ke GitHub via SSH, ikuti langkah berikut:
-
-```bash
-# 1. Generate SSH key baru (jika belum punya)
-ssh-keygen -t ed25519 -C "email-github-anda@example.com"
-
-# 2. Tampilkan public key untuk disalin
-cat ~/.ssh/id_ed25519.pub
-
-# 3. Salin output di atas, buka GitHub.com > Settings > SSH and GPG keys > New SSH key
-# 4. Paste key tersebut dan simpan.
-
-# 5. Test koneksi
-ssh -T git@github.com
-# Akan muncul pesan: "Hi username! You've successfully authenticated..."
-
-```
+1. **Python 3.x** terinstal di sistem Anda.
+2. **Git** terinstal dan terkonfigurasi dengan benar.
+3. **Koneksi SSH ke GitHub** (Sangat disarankan agar proses *push* berjalan otomatis tanpa perlu memasukkan *password* berulang kali).
 
 ---
 
 ## 📂 Susunan Project
 
-* `contribute.py`: Script generator utama yang akan menambahkan *log* aktivitas langsung ke dalam file `README.md`.
-* `contribute2.py`: Versi skrip yang lebih canggih dengan sistem *logging* bawaan Python dan menggunakan file `commits.txt` terpisah untuk mendata riwayat *commit*.
+* `github_activity_generator.py` / `contribute.py`: Script generator utama yang menjalankan logika.
 * `LICENSE`: Berisi dokumen resmi Lisensi MIT.
 * `README.md`: Dokumentasi proyek ini sendiri.
 
@@ -68,72 +47,41 @@ ssh -T git@github.com
 
 ## 🚀 Cara Penggunaan
 
-### 1. Clone Repository
+Anda dapat menjalankan script dengan berbagai argumen konfigurasi melalui terminal. Berikut adalah beberapa contohnya:
 
-Langkah pertama adalah mengunduh repositori ini ke komputer lokal Anda:
-
+**1. Dasar (Push ke GitHub)**
+Membuat *commit* secara default dan langsung melakukan push ke repositori.
 ```bash
-git clone https://github.com/wiraliwirya/GitHub-Activity-Generator
-cd GitHub-Activity-Generator
+python github_activity_generator.py -r git@github.com:username/repo.git
 
 ```
 
-### 2. Jalankan Script
-
-Anda dapat menjalankan script `contribute.py` atau `contribute2.py` dengan berbagai argumen melalui terminal.
-
-#### Mode Basic (Default)
-
-Membuat *commit* untuk 365 hari ke belakang dengan pengaturan *default*.
+**2. Realistis (Libur akhir pekan, 60% aktif, maks 8 commit per hari)**
+Membuat riwayat yang terlihat alami dan tidak seperti bot.
 
 ```bash
-python contribute2.py --repository=git@github.com:USERNAME/REPO-TARGET.git
+python github_activity_generator.py -r git@github.com:username/repo.git -nw -fr 60 -mc 8
 
 ```
 
-#### Mode Realistis (Rekomendasi)
-
-Membuat riwayat yang terlihat alami: libur di akhir pekan, frekuensi aktif 60%, dan maksimal 12 *commit* per hari.
+**3. Hanya lokal tanpa push (Mundur 180 hari)**
+Membangun riwayat hanya di direktori lokal komputer Anda tanpa mengirimnya ke GitHub.
 
 ```bash
-python contribute2.py \
-  --repository=git@github.com:USERNAME/REPO-TARGET.git \
-  --max_commits=12 \
-  --frequency=60 \
-  --no_weekends
+python github_activity_generator.py -db 180 -nw
 
 ```
 
-### Daftar Argumen Lengkap
+**4. Lihat semua opsi argumen**
+Menampilkan dokumentasi dan bantuan parameter lengkap.
 
-| Argumen | Flag | Deskripsi | Default |
-| --- | --- | --- | --- |
-| `--repository` | `-r` | Link remote repository GitHub (SSH/HTTPS) | `None` |
-| `--no_weekends` | `-nw` | Jangan commit di hari Sabtu/Minggu | `False` |
-| `--max_commits` | `-mc` | Maksimal commit per hari (Maksimal batas: 20) | `10` |
-| `--frequency` | `-fr` | Persentase hari untuk commit (0-100) | `80` |
-| `--user_name` | `-un` | Mengatur `user.name` konfigurasi Git | `None` |
-| `--user_email` | `-ue` | Mengatur `user.email` konfigurasi Git | `None` |
-| `--days_before` | `-db` | Jumlah hari ke belakang dari hari ini | `365` |
-| `--days_after` | `-da` | Jumlah hari ke depan dari hari ini | `0` |
+```bash
+python github_activity_generator.py --help
+
+```
 
 ---
 
 ## 🤝 Kontribusi
 
-Kontribusi selalu diterima! Jika Anda ingin menambahkan fitur baru atau memperbaiki *bug*:
-
-1. *Fork* repository ini.
-2. Buat *branch* fitur baru Anda (`git checkout -b fitur-keren`).
-3. Lakukan *commit* pada perubahan Anda (`git commit -m 'Menambahkan fitur keren'`).
-4. *Push* ke branch tersebut (`git push origin fitur-keren`).
-5. Buat **Pull Request** di GitHub.
-
----
-
-## 📄 Lisensi
-
-Proyek ini didistribusikan di bawah lisensi **MIT**.
-Anda diizinkan secara gratis untuk menggunakan, menyalin, memodifikasi, menggabungkan, menerbitkan, dan mendistribusikan salinan perangkat lunak ini tanpa batasan, asalkan pemberitahuan hak cipta dan izin disertakan dalam semua salinan. Perangkat lunak ini disediakan "APA ADANYA" tanpa jaminan apa pun.
-
-Copyright (c) 2026 **WIRA LIWIRYA**
+Kontribusi selalu diterima! Jika Anda ingin menambahkan fitur baru atau memperbaiki *bug*
